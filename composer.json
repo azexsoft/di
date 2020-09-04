@@ -30,5 +30,13 @@
     "psr-4": {
       "Azexsoft\\Di\\": "src"
     }
+  },
+  "extra": {
+    "branch-alias": {
+      "dev-master": "1.0.x-dev"
+    }
+  },
+  "config": {
+    "sort-packages": true
   }
 }
