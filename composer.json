@@ -1,0 +1,34 @@
+{
+  "name": "azexsoft/di",
+  "type": "library",
+  "description": "Azex Dependency Injection",
+  "keywords": [
+    "di",
+    "dependency",
+    "injection",
+    "container",
+    "injector",
+    "autowiring",
+    "psr-11"
+  ],
+  "license": "MIT",
+  "authors": [
+    {
+      "name": "Aliaksandr Zakharenka",
+      "email": "mail@al3xable.me"
+    }
+  ],
+  "minimum-stability": "stable",
+  "require": {
+    "php": "^7.4|^8.0",
+    "psr/container": "^1.0"
+  },
+  "provide": {
+    "psr/container-implementation": "1.0.0"
+  },
+  "autoload": {
+    "psr-4": {
+      "Azexsoft\\Di\\": "src"
+    }
+  }
+}
