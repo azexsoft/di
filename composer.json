@@ -1,7 +1,7 @@
 {
   "name": "azexsoft/di",
   "type": "library",
-  "description": "Azex Dependency Injection",
+  "description": "Azexsoft Dependency Injection",
   "keywords": [
     "di",
     "dependency",
