@@ -37,6 +37,7 @@ final class Container implements ContainerInterface
     public function __construct(array $bindings = [], array $providers = [])
     {
         $this->bind(ContainerInterface::class, fn() => $this);
+        $this->bind(Injector::class, new Injector($this));
 
         // Bindings register
         foreach ($bindings as $abstract => $concrete) {
@@ -53,7 +54,7 @@ final class Container implements ContainerInterface
      * Bind abstract classname to concrete through classname or closure.
      *
      * @param string $abstract Abstract classname
-     * @param string|Closure $concrete Concrete classname or closure
+     * @param string|Closure|object $concrete Concrete classname or closure
      */
     public function bind(string $abstract, $concrete): void
     {
@@ -126,8 +127,10 @@ final class Container implements ContainerInterface
         $this->building[$abstract] = 1;
 
         // Make instance of concrete implementation of abstract
-        $instance = $concrete instanceof Closure
-            ? $this->get(Injector::class)->invoke($concrete)
+        $instance = is_object($concrete)
+            ? $concrete instanceof Closure
+                ? $this->get(Injector::class)->invoke($concrete)
+                : $concrete
             : $this->get(Injector::class)->build($concrete, $arguments);
 
         // Remove circular lock
