@@ -156,6 +156,6 @@ final class Container implements ContainerInterface
 
     public function has($id)
     {
-        return isset($this->bindings[$id]) || isset($this->instances[$id]);
+        return isset($this->bindings[$id]) || isset($this->instances[$id]) || class_exists($id);
     }
 }
