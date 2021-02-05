@@ -54,9 +54,9 @@ final class Container implements ContainerInterface
      * Bind abstract classname to concrete through classname or closure.
      *
      * @param string $abstract Abstract classname
-     * @param string|Closure|object $concrete Concrete classname or closure
+     * @param object|string $concrete Concrete classname, instance or closure
      */
-    public function bind(string $abstract, $concrete): void
+    public function bind(string $abstract, object|string $concrete): void
     {
         $this->bindings[$abstract] = $concrete;
         unset($this->instances[$abstract]);

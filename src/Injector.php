@@ -137,7 +137,7 @@ final class Injector
      *
      * @throws InvalidConfigException which can not resolve arguments.
      */
-    public function invoke(object $object, string $method = '__invoke', array $arguments = [])
+    public function invoke(object $object, string $method = '__invoke', array $arguments = []): mixed
     {
         try {
             if ($object instanceof Closure) {

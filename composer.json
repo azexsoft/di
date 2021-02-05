@@ -20,7 +20,7 @@
   ],
   "minimum-stability": "stable",
   "require": {
-    "php": "^7.4|^8.0",
+    "php": "^8.0",
     "psr/container": "^1.0"
   },
   "provide": {
@@ -29,11 +29,6 @@
   "autoload": {
     "psr-4": {
       "Azexsoft\\Di\\": "src"
-    }
-  },
-  "extra": {
-    "branch-alias": {
-      "dev-master": "1.0.x-dev"
     }
   },
   "config": {
