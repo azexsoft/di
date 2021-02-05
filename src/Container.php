@@ -83,6 +83,7 @@ final class Container implements ContainerInterface
         if ($provider instanceof DeferredServiceProviderInterface) {
             foreach ($provider->provides() as $id) {
                 $this->bindings[$id] = $provider;
+                unset($this->instances[$id]);
             }
         } else {
             $provider->register($this);
