@@ -1,10 +1,12 @@
-# Azexsoft Dependency Injection
+Azexsoft Dependency Injection
+=============================
 
 Simple [PSR-11](http://www.php-fig.org/psr/psr-11/) compatible
 [dependency injection](http://en.wikipedia.org/wiki/Dependency_injection) container and injector that is able to
 instantiate and configure classes resolving dependencies. Minimal PHP version is 8.0.
 
-## Features
+Features
+--------
 
 - [PSR-11](http://www.php-fig.org/psr/psr-11/) compatible.
 - Injector supports constructor (build) and invoke (object method) injection.
@@ -12,9 +14,8 @@ instantiate and configure classes resolving dependencies. Minimal PHP version is
 - Supports classname, object and Closure bindings
 - Supports service providers and deferred service providers.
 
-## Using container
-
-### Configure container
+Configure container
+-------------------
 
 Just create container instance with an array of bindings and array of service providers.
 
