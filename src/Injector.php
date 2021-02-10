@@ -16,16 +16,14 @@ use ReflectionParameter;
 
 class Injector
 {
-    private ContainerInterface $container;
-
     /**
      * Injector constructor.
      *
      * @param ContainerInterface $container
      */
-    public function __construct(ContainerInterface $container)
-    {
-        $this->container = $container;
+    public function __construct(
+        protected ContainerInterface $container,
+    ) {
     }
 
     /**
@@ -66,7 +64,7 @@ class Injector
      *
      * @throws InvalidConfigException
      */
-    private function resolveDependencies(array $dependencies, array $parameters = []): array
+    protected function resolveDependencies(array $dependencies, array $parameters = []): array
     {
         $results = [];
 
@@ -104,7 +102,7 @@ class Injector
      * @param ReflectionParameter $parameter
      * @return string|null
      */
-    private function getParameterClassName(ReflectionParameter $parameter): ?string
+    protected function getParameterClassName(ReflectionParameter $parameter): ?string
     {
         $type = $parameter->getType();
 

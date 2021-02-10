@@ -19,11 +19,11 @@ class Container implements ContainerInterface
      * @var array used to collect ids instantiated during build
      * to detect circular references
      */
-    private array $building = [];
+    protected array $building = [];
 
-    private array $bindings = [];
+    protected array $bindings = [];
 
-    private array $instances = [];
+    protected array $instances = [];
 
     /**
      * Container constructor.
