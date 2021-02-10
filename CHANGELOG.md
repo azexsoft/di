@@ -25,7 +25,7 @@ Azexsoft Dependency Injection Change Log
 1.0.1 September 5, 2020
 -----------------------
 
-- Add branch alias and sort-packages
+- Add `1.0.x-dev` branch alias and sort-packages
 
 1.0.0 September 5, 2020
 -----------------------
