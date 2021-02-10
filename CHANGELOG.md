@@ -10,6 +10,7 @@ Azexsoft Dependency Injection Change Log
 - Fix provider unset instances after rebind deferred service provider
 - Remove `1.0.x-dev` branch alias
 - `Container` and `Injector` is not final now
+- Get concrete binding if abstract binding is string
 
 1.0.3 December 18, 2020
 -----------------------

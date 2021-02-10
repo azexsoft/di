@@ -108,6 +108,11 @@ class Container implements ContainerInterface
             $concrete = $this->bindings[$abstract];
         }
 
+        // Get concrete binding if abstract binding is string
+        if (is_string($concrete) && isset($this->bindings[$concrete])) {
+            $concrete = $this->bindings[$concrete];
+        }
+
         // Register deferred service provider services
         if ($concrete instanceof ServiceProviderInterface) {
             unset($this->bindings[$abstract]);
