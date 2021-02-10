@@ -14,7 +14,7 @@ use ReflectionFunction;
 use ReflectionNamedType;
 use ReflectionParameter;
 
-final class Injector
+class Injector
 {
     private ContainerInterface $container;
 

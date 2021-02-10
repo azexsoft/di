@@ -9,6 +9,7 @@ Azexsoft Dependency Injection Change Log
 - Changed argument in method `register()` at service provider interface from `Psr\Container\ContainerInterface` to `Azexsoft\Di\Container`
 - Fix provider unset instances after rebind deferred service provider
 - Remove `1.0.x-dev` branch alias
+- `Container` and `Injector` is not final now
 
 1.0.3 December 18, 2020
 -----------------------
