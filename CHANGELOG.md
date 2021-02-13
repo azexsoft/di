@@ -4,8 +4,6 @@ Azexsoft Dependency Injection Change Log
 2.0.0 under development
 -----------------------
 
-- Minimal PHP version now is 8.0
-- Added PHP 8.0 mixed types
 - Changed argument in method `register()` at service provider interface from `Psr\Container\ContainerInterface` to `Azexsoft\Di\Container`
 - Fix provider unset instances after rebind deferred service provider
 - Remove `1.0.x-dev` branch alias
