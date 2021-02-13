@@ -1,7 +1,7 @@
 Azexsoft Dependency Injection Change Log
 ========================================
 
-2.0.0 under development
+1.1.0 under development
 -----------------------
 
 - Changed argument in method `register()` at service provider interface from `Psr\Container\ContainerInterface` to `Azexsoft\Di\Container`

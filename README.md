@@ -1,6 +1,10 @@
 Azexsoft Dependency Injection
 =============================
 
+[![License](https://poser.pugx.org/azexsoft/di/license)](https://packagist.org/packages/azexsoft/di)
+[![Latest Stable Version](https://poser.pugx.org/azexsoft/di/v)](https://packagist.org/packages/azexsoft/di)
+[![Total Downloads](https://poser.pugx.org/azexsoft/di/downloads)](https://packagist.org/packages/azexsoft/di)
+
 Simple [PSR-11](http://www.php-fig.org/psr/psr-11/) compatible
 [dependency injection](http://en.wikipedia.org/wiki/Dependency_injection) container and injector that is able to
 instantiate and configure classes resolving dependencies. Minimal PHP version is 8.0.
