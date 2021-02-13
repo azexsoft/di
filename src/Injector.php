@@ -16,14 +16,16 @@ use ReflectionParameter;
 
 class Injector
 {
+    protected ContainerInterface $container;
+
     /**
      * Injector constructor.
      *
      * @param ContainerInterface $container
      */
-    public function __construct(
-        protected ContainerInterface $container,
-    ) {
+    public function __construct(ContainerInterface $container)
+    {
+        $this->container = $container;
     }
 
     /**
@@ -135,7 +137,7 @@ class Injector
      *
      * @throws InvalidConfigException which can not resolve arguments.
      */
-    public function invoke(object $object, string $method = '__invoke', array $arguments = []): mixed
+    public function invoke(object $object, string $method = '__invoke', array $arguments = [])
     {
         try {
             if ($object instanceof Closure) {
