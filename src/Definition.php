@@ -7,9 +7,9 @@ namespace Azexsoft\Di;
 use Closure;
 
 /**
- * Class ArgumentDefinition required for resolve method argument in dependency injection container.
+ * Definition required for resolve argument or property in dependency injection container.
  */
-final class ArgumentDefinition
+final class Definition
 {
     private Closure $closure;
 

@@ -100,7 +100,7 @@ class Injector
             } else {
                 try {
                     // 
-                    if (is_object($value) && $value instanceof ArgumentDefinition) {
+                    if (is_object($value) && $value instanceof Definition) {
                         $value = $this->invoke($value->getClosure());
                     }
                     $instance->$key = $value;
@@ -150,7 +150,7 @@ class Injector
             }
 
             // Invoke ArgumentDefinition Closure
-            if (is_object($result) && $result instanceof ArgumentDefinition) {
+            if (is_object($result) && $result instanceof Definition) {
                 $result = $this->invoke($result->getClosure());
             }
 
