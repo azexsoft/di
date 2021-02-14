@@ -36,7 +36,7 @@ class Injector
      * @param array $arguments Arguments which provides to class constructor when no __constructor() .
      * @return object Instance of abstract classname.
      *
-     * @throws InvalidConfigException which can not resolve arguments or invalid array params provided
+     * @throws InvalidConfigException which can not resolve arguments or invalid array definitions provided
      */
     public function build($concrete, array $arguments = []): object
     {
@@ -53,7 +53,6 @@ class Injector
             // Constructor arguments
             if (isset($concrete['__constructor()'])) {
                 $arguments = $concrete['__constructor()'];
-
                 unset($concrete['__constructor()']);
             }
         } else {
@@ -75,8 +74,13 @@ class Injector
         // Make instance
         $constructor = $reflector->getConstructor();
         $instance = is_null($constructor)
-            ? new $concrete()
-            : new $concrete(...$this->resolveDependencies($constructor->getParameters(), $arguments));
+            ? new $class()
+            : new $class(...$this->resolveDependencies($constructor->getParameters(), $arguments));
+
+        // Return instance, if concrete is not array definitions
+        if (is_string($concrete)) {
+            return $instance;
+        }
 
         // Call methods and inject parameters
         foreach ($concrete as $key => $value) {
@@ -95,6 +99,10 @@ class Injector
                 $instance->$methodName(...$this->resolveDependencies($method->getParameters(), $value));
             } else {
                 try {
+                    // 
+                    if (is_object($value) && $value instanceof ArgumentDefinition) {
+                        $value = $this->invoke($value->getClosure());
+                    }
                     $instance->$key = $value;
                 } catch (Throwable $e) {
                     throw new InvalidConfigException("Failed to set [$key] property in class [$class].", 0, $e);
