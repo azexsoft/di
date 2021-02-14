@@ -15,7 +15,7 @@ use ReflectionNamedType;
 use ReflectionParameter;
 use Throwable;
 
-class Injector
+final class Injector
 {
     protected ContainerInterface $container;
 

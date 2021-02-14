@@ -57,7 +57,7 @@ $container->bind(FooInterface::class, OtherFoo::class);
 $otherFoo = $container->get(FooInterface::class); // will be returned OtherFoo
 ```
 
-Array bindings for injector builder.
+Array definitions for injector builder.
 
 ```PHP
 $container->bind(Abstract::class, [

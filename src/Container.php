@@ -13,7 +13,7 @@ use Closure;
 use Exception;
 use Psr\Container\ContainerInterface;
 
-class Container implements ContainerInterface
+final class Container implements ContainerInterface
 {
     /**
      * @var array used to collect ids instantiated during build
