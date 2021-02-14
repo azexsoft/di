@@ -13,6 +13,7 @@ use ReflectionException;
 use ReflectionFunction;
 use ReflectionNamedType;
 use ReflectionParameter;
+use Throwable;
 
 class Injector
 {
@@ -31,30 +32,77 @@ class Injector
     /**
      * Build instance of concrete class with resolve arguments.
      *
-     * @param string $concrete Concrete classname.
-     * @param array $arguments Arguments which provides to class constructor.
+     * @param string|array $concrete Classname or definition array.
+     * @param array $arguments Arguments which provides to class constructor when no __constructor() .
      * @return object Instance of abstract classname.
      *
-     * @throws InvalidConfigException which can not resolve arguments
+     * @throws InvalidConfigException which can not resolve arguments or invalid array params provided
      */
-    public function build(string $concrete, array $arguments = []): object
+    public function build($concrete, array $arguments = []): object
     {
+        // Getting classname and constructor arguments
+        if (is_string($concrete)) {
+            $class = $concrete;
+        } elseif (is_array($concrete)) {
+            $class = $concrete['__class'] ?? null;
+            if (is_null($class)) {
+                throw new InvalidConfigException("No __class provided.");
+            }
+            unset($concrete['__class']);
+
+            // Constructor arguments
+            if (isset($concrete['__constructor()'])) {
+                $arguments = $concrete['__constructor()'];
+
+                unset($concrete['__constructor()']);
+            }
+        } else {
+            throw new InvalidConfigException("Invalid classname provided.");
+        }
+
+        // Make reflection object
         try {
-            $reflector = new ReflectionClass($concrete);
+            $reflector = new ReflectionClass($class);
         } catch (ReflectionException $e) {
-            throw new InvalidConfigException("Target class [$concrete] does not exist.", 0, $e);
+            throw new InvalidConfigException("Target class [$class] does not exist.", 0, $e);
         }
 
+        // Check class for instantiable
         if (!$reflector->isInstantiable()) {
-            throw new InvalidConfigException("Target [$concrete] is not instantiable.");
+            throw new InvalidConfigException("Target [$class] is not instantiable.");
         }
 
+        // Make instance
         $constructor = $reflector->getConstructor();
-        if (is_null($constructor)) {
-            return new $concrete();
+        $instance = is_null($constructor)
+            ? new $concrete()
+            : new $concrete(...$this->resolveDependencies($constructor->getParameters(), $arguments));
+
+        // Call methods and inject parameters
+        foreach ($concrete as $key => $value) {
+            // Call method
+            if (substr($key, -2) === '()') {
+                $methodName = substr($key, 0, -2);
+                try {
+                    $method = $reflector->getMethod($methodName);
+                } catch (ReflectionException $e) {
+                    throw new InvalidConfigException(
+                        "Target method [$methodName] does not exist in class [$class].",
+                        0,
+                        $e
+                    );
+                }
+                $instance->$methodName(...$this->resolveDependencies($method->getParameters(), $value));
+            } else {
+                try {
+                    $instance->$key = $value;
+                } catch (Throwable $e) {
+                    throw new InvalidConfigException("Failed to set [$key] property in class [$class].", 0, $e);
+                }
+            }
         }
 
-        return new $concrete(...$this->resolveDependencies($constructor->getParameters(), $arguments));
+        return $instance;
     }
 
     /**
@@ -87,9 +135,15 @@ class Injector
                     }
                 }
             } catch (ReflectionException $e) {
-                $in = $dependency->getDeclaringClass() ? 'class ' . $dependency->getDeclaringClass()->getName(
-                    ) : 'closure';
+                $in = $dependency->getDeclaringClass()
+                    ? 'class ' . $dependency->getDeclaringClass()->getName()
+                    : 'closure';
                 throw new InvalidConfigException("Unresolvable dependency resolving [$dependency] in $in", 0, $e);
+            }
+
+            // Invoke ArgumentDefinition Closure
+            if (is_object($result) && $result instanceof ArgumentDefinition) {
+                $result = $this->invoke($result->getClosure());
             }
 
             $results[] = $result;
