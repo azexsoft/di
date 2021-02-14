@@ -6,8 +6,8 @@ Azexsoft Dependency Injection
 [![Total Downloads](https://poser.pugx.org/azexsoft/di/downloads)](https://packagist.org/packages/azexsoft/di)
 
 Simple [PSR-11](http://www.php-fig.org/psr/psr-11/) compatible
-[dependency injection](http://en.wikipedia.org/wiki/Dependency_injection) container and injector that is able to
-instantiate and configure classes resolving dependencies. Minimal PHP version is 8.0.
+[dependency injection](http://en.wikipedia.org/wiki/Dependency_injection) container and injector based on autowiring
+that is able to instantiate and configure classes resolving dependencies. Minimal PHP version is 7.4.
 
 Features
 --------
@@ -17,7 +17,7 @@ Features
 - Supports classname, object and Closure bindings.
 - Supports service providers and deferred service providers.
 - Injector resolves dependencies for definitions when building class and invoke dependencies.
-- Injector supports array definitions with method arguments and properties resolving dependencies. 
+- Injector supports array definitions with method arguments and properties resolving dependencies.
 
 Configure container
 -------------------
@@ -48,8 +48,8 @@ $providers = [
 $container = new \Azexsoft\Di\Container($bindings, $providers);
 ```
 
-Also, you can add bindings and providers after container be configurated. After rebinding old instance will be removed from
-container.
+Also, you can add bindings and providers after container be configurated. After rebinding old instance will be removed
+from container.
 
 ```PHP
 $foo = $container->get(FooInterface::class); // will be returned Foo
