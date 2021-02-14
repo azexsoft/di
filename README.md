@@ -13,10 +13,11 @@ Features
 --------
 
 - [PSR-11](http://www.php-fig.org/psr/psr-11/) compatible.
-- Injector supports constructor (build) and invoke (object method) injection.
 - Detects circular references.
-- Supports classname, object and Closure bindings
+- Supports classname, object and Closure bindings.
 - Supports service providers and deferred service providers.
+- Injector resolves dependencies for definitions when building class and invoke dependencies.
+- Injector supports array definitions with method arguments and properties resolving dependencies. 
 
 Configure container
 -------------------
@@ -54,4 +55,36 @@ container.
 $foo = $container->get(FooInterface::class); // will be returned Foo
 $container->bind(FooInterface::class, OtherFoo::class);
 $otherFoo = $container->get(FooInterface::class); // will be returned OtherFoo
+```
+
+Array bindings for injector builder.
+
+```PHP
+$container->bind(Abstract::class, [
+    '__class' => Concrete::class, // Concrete classname
+    '__construct()' => [
+        'simpleParam' => 123,
+        'otherSimpleParam' => $params['concreteSomeParam'],
+        'someObject' => new Definition(fn(Dependency $d) => $d->getSomeObject()),
+    ],
+    'someMethod()' => [
+        'methodParam' => $params['someMethodParam'],
+    ],
+    'someProperty' => 321
+]);
+```
+
+Instead of:
+
+```PHP
+$container->bind(Abstract::class, function(Injector $injector, Dependency $d) use ($params) {
+    $concrete = $injector->build(Concrete::class,  [
+        'simpleParam' => 123,
+        'otherSimpleParam' => $params['concreteSomeParam'],
+        'someObject' => $d->getSomeObject(),
+    ]);
+    $concrete->someMethod($params['someMethodParam']);
+    $concrete->someProperty = 321;
+    return $concrete;
+});
 ```
