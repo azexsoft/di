@@ -1,7 +1,7 @@
 Azexsoft Dependency Injection Change Log
 ========================================
 
-1.1.0 under development
+1.1.0 February 14, 2021
 -----------------------
 
 - Bug: Fix provider unset instances after rebind deferred service provider
