@@ -17,7 +17,10 @@ use Throwable;
 
 final class Injector
 {
-    protected ContainerInterface $container;
+    /**
+     * @var ContainerInterface Container that using for autowiring
+     */
+    protected $container;
 
     /**
      * Injector constructor.
@@ -32,13 +35,14 @@ final class Injector
     /**
      * Build instance of concrete class with resolve arguments.
      *
-     * @param string|array $concrete Classname or definition array.
+     * @template T
+     * @param class-string<T>|array $concrete Classname or array definition.
      * @param array $arguments Arguments which provides to class constructor when no __constructor() .
-     * @return object Instance of abstract classname.
+     * @return T Instance of abstract classname.
      *
      * @throws InvalidConfigException which can not resolve arguments or invalid array definitions provided
      */
-    public function build($concrete, array $arguments = []): object
+    public function build($concrete, array $arguments = [])
     {
         // Getting classname and constructor arguments
         if (is_string($concrete)) {
@@ -99,8 +103,8 @@ final class Injector
                 $instance->$methodName(...$this->resolveDependencies($method->getParameters(), $value));
             } else {
                 try {
-                    // 
-                    if (is_object($value) && $value instanceof Definition) {
+                    // Invoke ParameterDefinition Closure
+                    if ($value instanceof Definition) {
                         $value = $this->invoke($value->getClosure());
                     }
                     $instance->$key = $value;
@@ -150,7 +154,7 @@ final class Injector
             }
 
             // Invoke ArgumentDefinition Closure
-            if (is_object($result) && $result instanceof Definition) {
+            if ($result instanceof Definition) {
                 $result = $this->invoke($result->getClosure());
             }
 
@@ -164,7 +168,7 @@ final class Injector
      * Get the class name of the given parameter's type, if possible.
      *
      * @param ReflectionParameter $parameter
-     * @return string|null
+     * @return class-string|null
      */
     protected function getParameterClassName(ReflectionParameter $parameter): ?string
     {
@@ -199,7 +203,7 @@ final class Injector
      *
      * @throws InvalidConfigException which can not resolve arguments.
      */
-    public function invoke(object $object, string $method = '__invoke', array $arguments = [])
+    public function invoke($object, string $method = '__invoke', array $arguments = [])
     {
         try {
             if ($object instanceof Closure) {

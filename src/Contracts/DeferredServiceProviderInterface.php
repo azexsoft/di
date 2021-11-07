@@ -7,7 +7,7 @@ namespace Azexsoft\Di\Contracts;
 interface DeferredServiceProviderInterface extends ServiceProviderInterface
 {
     /**
-     * @return string[] a list of IDs of services provided
+     * @return class-string[] a list of IDs of services provided
      */
     public function provides(): array;
 }

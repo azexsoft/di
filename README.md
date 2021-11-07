@@ -7,7 +7,8 @@ Azexsoft Dependency Injection
 
 Simple [PSR-11](http://www.php-fig.org/psr/psr-11/) compatible
 [dependency injection](http://en.wikipedia.org/wiki/Dependency_injection) container and injector based on autowiring
-that is able to instantiate and configure classes resolving dependencies. Minimal PHP version is 7.4.
+that is able to instantiate and configure classes resolving dependencies. Works only with classes and interfaces.
+Works with PHP 7.1+ and 8.0+.
 
 Features
 --------

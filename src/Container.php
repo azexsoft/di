@@ -19,24 +19,33 @@ final class Container implements ContainerInterface
      * @var array used to collect ids instantiated during build
      * to detect circular references
      */
-    protected array $building = [];
+    protected $building = [];
 
-    protected array $bindings = [];
+    /**
+     * @var array
+     */
+    protected $bindings = [];
 
-    protected array $instances = [];
+    /**
+     * @var array
+     */
+    protected $instances = [];
 
     /**
      * Container constructor.
      *
      * @param array $bindings
-     * @param string[] $providers
+     * @param class-string[] $providers
      *
-     * @throws InvalidConfigException which can not resolve arguments or provider does not implements ServiceProviderInterface
+     * @throws InvalidConfigException which can not resolve arguments or provider does not implement ServiceProviderInterface
      * @throws CircularReferenceException which circular reference detected while building
+     * @throws NotFoundException which not found
      */
     public function __construct(array $bindings = [], array $providers = [])
     {
-        $this->bind(ContainerInterface::class, fn() => $this);
+        $this->bind(ContainerInterface::class, function() {
+            return $this;
+        });
         $this->bind(Injector::class, new Injector($this));
 
         // Bindings register
@@ -53,8 +62,8 @@ final class Container implements ContainerInterface
     /**
      * Bind abstract classname to concrete through classname or closure.
      *
-     * @param string $abstract Abstract classname
-     * @param Closure|object|string $concrete Concrete classname, instance or closure
+     * @param class-string $abstract Abstract classname
+     * @param class-string|object|array|Closure $concrete Concrete classname, instance, array definition or closure
      */
     public function bind(string $abstract, $concrete): void
     {
@@ -66,10 +75,11 @@ final class Container implements ContainerInterface
      * Adds service provider to the container. Unless service provider is deferred
      * it would be immediately registered.
      *
-     * @param string $provider provider classname
+     * @param class-string $provider provider classname
      *
-     * @throws InvalidConfigException which can not resolve arguments or provider does not implements ServiceProviderInterface
+     * @throws InvalidConfigException which can not resolve arguments or provider does not implement ServiceProviderInterface
      * @throws CircularReferenceException which circular reference detected while building
+     * @throws NotFoundException which not found
      */
     public function provide(string $provider): void
     {
@@ -93,14 +103,17 @@ final class Container implements ContainerInterface
     /**
      * Build instance of abstract or concrete class with resolve arguments.
      *
-     * @param string $abstract Abstract or concrete classname.
+     * @template T
+     *
+     * @param class-string<T> $abstract Abstract or concrete classname.
      * @param array $arguments Arguments which provides to class constructor.
-     * @return object Instance of abstract classname.
+     * @return T Instance of abstract classname.
      *
      * @throws InvalidConfigException which can not resolve arguments
      * @throws CircularReferenceException which circular reference detected while building
+     * @throws NotFoundException which not found
      */
-    public function build(string $abstract, array $arguments = []): object
+    public function build(string $abstract, array $arguments = [])
     {
         // Get concrete classname
         $concrete = $abstract;
@@ -145,6 +158,19 @@ final class Container implements ContainerInterface
         return $this->instances[$abstract] = $instance;
     }
 
+    /**
+     * Returns an instance by either interface name or alias.
+     *
+     * Same instance of the class will be returned each time this method is called.
+     *
+     * @template T
+     * @param class-string<T> $id The interface or an alias name that was previously registered.
+     * @return T
+     *
+     * @throws InvalidConfigException which can not resolve arguments
+     * @throws CircularReferenceException which circular reference detected while building
+     * @throws NotFoundException which not found
+     */
     public function get($id)
     {
         try {
@@ -160,7 +186,14 @@ final class Container implements ContainerInterface
         }
     }
 
-    public function has($id)
+    /**
+     * Returns a value indicating whether the container has the definition of the specified name.
+     *
+     * @param class-string $id class name or interface name
+     *
+     * @return bool whether the container is able to provide instance of class specified.
+     */
+    public function has($id): bool
     {
         return isset($this->bindings[$id]) || isset($this->instances[$id]) || class_exists($id);
     }

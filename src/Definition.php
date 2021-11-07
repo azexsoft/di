@@ -11,7 +11,10 @@ use Closure;
  */
 final class Definition
 {
-    private Closure $closure;
+    /**
+     * @var Closure
+     */
+    private $closure;
 
     public function __construct(Closure $closure)
     {

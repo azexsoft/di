@@ -1,6 +1,12 @@
 Azexsoft Dependency Injection Change Log
 ========================================
 
+1.1.1 November 7, 2021
+----------------------
+
+- Chg: Minimal version of PHP is 7.1 now
+- Chg: Class-strings with templates everywhere
+
 1.1.0 February 14, 2021
 -----------------------
 
