@@ -83,7 +83,10 @@ final class Container implements ContainerInterface
      */
     public function provide($provider): void
     {
-        $provider = $this->build($provider);
+        if (is_string($provider)) {
+            $provider = $this->build($provider);
+        }
+
         if (!$provider instanceof ServiceProviderInterface) {
             throw new InvalidConfigException(
                 'Service provider should be an instance of ' . ServiceProviderInterface::class
