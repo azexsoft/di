@@ -116,10 +116,7 @@ final class Container implements ContainerInterface
     public function build(string $abstract, array $arguments = [])
     {
         // Get concrete classname
-        $concrete = $abstract;
-        if (isset($this->bindings[$abstract])) {
-            $concrete = $this->bindings[$abstract];
-        }
+        $concrete = $this->bindings[$abstract] ?? $abstract;
 
         // Get concrete binding if abstract binding is string
         if (is_string($concrete) && isset($this->bindings[$concrete])) {
@@ -146,11 +143,13 @@ final class Container implements ContainerInterface
         $this->building[$abstract] = 1;
 
         // Make instance of concrete implementation of abstract
-        $instance = is_object($concrete)
-            ? $concrete instanceof Closure
+        if (is_object($concrete)) {
+            $instance = $concrete instanceof Closure
                 ? $this->get(Injector::class)->invoke($concrete)
-                : $concrete
-            : $this->get(Injector::class)->build($concrete, $arguments);
+                : $concrete;
+        } else {
+            $instance = $this->get(Injector::class)->build($concrete, $arguments);
+        }
 
         // Remove circular lock
         unset($this->building[$abstract]);
@@ -164,8 +163,8 @@ final class Container implements ContainerInterface
      * Same instance of the class will be returned each time this method is called.
      *
      * @template T
-     * @param class-string<T> $id The interface or an alias name that was previously registered.
-     * @return T
+     * @param string|class-string<T> $id The interface or an alias name that was previously registered.
+     * @return T|mixed
      *
      * @throws InvalidConfigException which can not resolve arguments
      * @throws CircularReferenceException which circular reference detected while building
@@ -174,10 +173,7 @@ final class Container implements ContainerInterface
     public function get($id)
     {
         try {
-            if (isset($this->instances[$id])) {
-                return $this->instances[$id];
-            }
-            return $this->build($id);
+            return $this->instances[$id] ?? $this->build($id);
         } catch (Exception $e) {
             if (!$this->has($id)) {
                 throw new NotFoundException($id, $e->getCode(), $e);
