@@ -35,7 +35,7 @@ final class Container implements ContainerInterface
      * Container constructor.
      *
      * @param array $bindings
-     * @param class-string[] $providers
+     * @param array<ServiceProviderInterface|class-string> $providers
      *
      * @throws InvalidConfigException which can not resolve arguments or provider does not implement ServiceProviderInterface
      * @throws CircularReferenceException which circular reference detected while building
@@ -75,13 +75,13 @@ final class Container implements ContainerInterface
      * Adds service provider to the container. Unless service provider is deferred
      * it would be immediately registered.
      *
-     * @param class-string $provider provider classname
+     * @param ServiceProviderInterface|class-string $provider provider instance or classname
      *
      * @throws InvalidConfigException which can not resolve arguments or provider does not implement ServiceProviderInterface
      * @throws CircularReferenceException which circular reference detected while building
      * @throws NotFoundException which not found
      */
-    public function provide(string $provider): void
+    public function provide($provider): void
     {
         $provider = $this->build($provider);
         if (!$provider instanceof ServiceProviderInterface) {

@@ -44,6 +44,7 @@ $bindings = [
 // Service providers
 $providers = [
     ApplicationServiceProvider::class,
+    new FooServiceProvider(),
 ];
 
 $container = new \Azexsoft\Di\Container($bindings, $providers);
@@ -58,7 +59,7 @@ $container->bind(FooInterface::class, OtherFoo::class);
 $otherFoo = $container->get(FooInterface::class); // will be returned OtherFoo
 ```
 
-Array definitions for injector builder.
+Array definitions for injector builder. Works for bind() and provide() methods.
 
 ```PHP
 $container->bind(Abstract::class, [
