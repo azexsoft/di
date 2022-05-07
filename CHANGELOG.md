@@ -1,6 +1,11 @@
 Azexsoft Dependency Injection Change Log
 ========================================
 
+1.1.2 May 7, 2022
+-----
+
+- Enh: Allow to define service providers like bindings.
+
 1.1.1 November 7, 2021
 ----------------------
 
